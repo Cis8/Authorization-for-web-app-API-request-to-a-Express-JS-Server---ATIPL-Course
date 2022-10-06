@@ -10,6 +10,16 @@ The system is composed as follows:
 - An Okta developer cli that will serve as identity provider;
 - A java program that uses Pulumi to ease the creation of Okta resources.
 
+### Short overview of the system functioning
+
+- First, the user accesses the client web app
+- when the user attempts to sign in, or access the protected component page, it is redirected to the Sign in widject offered by Okta
+- after having submitted the login form, the authorization server of the Okta Developer CLI verifies the correctness of the users credentials
+- in case the login is successful, the user is redirected to the home page of the web-app (or to the pretected page if he has been previously redirecrted while trying to access that page)
+- the user can now use the protected page to send REST API requests to the server and access the protected resources by sending to the server http REST API requests (the token given back from Okta after the user logged in, is attached to the header of the http request)
+- the token is verified by the backend, thanks to an Okta library. If it is valid and the desired resource is present, then is sent back to the client. Otherwise, an error message is sent back
+- the success or the failure of the procedure is finally shown to the user
+
 
 ### Express backend JS server
 
@@ -62,6 +72,7 @@ Since we use this Proxy configuration, the web upp must be launched with the opt
 #### Organization and functionalities of the application
 
 There are three main components: AppComponent, LoginComponent, and ProtectedComponent.
+Moreover an important service is noteworthy: the FormService component.
 
 ##### App Component
 
@@ -99,6 +110,10 @@ In the ts file we have the `GetResource()` method, that is invocked when the _Su
 
 The HTML file of the Protected component will show the JSON body of the request if the requestState variable is equals to 0 (was successfull), an error message otherwise (requestState is 1).
 
+##### FormService service
+
+It is the service that actually send the http REST API requests to the backend server. It functioning is really simple: the REST request is of the GET type and the given headers are attached to it and the name is concatenated with the given string (representing the resource name in our case).
+
 
 ### Okta developer CLI
 
@@ -118,3 +133,31 @@ The HTML file of the Protected component will show the JSON body of the request 
 
 
 The Java program with the Pulumi libraries is used to automate the process of Okta resources creation. In the App.java file we define the creation of an Okta application and an Okta user. These resources are enough to test the functioning of the whole system.
+
+## Personal observations on the developed system and on the technologies used
+
+### The simplicity of offering protected APIs
+
+The simplicity of the system is for sure noteworthy. Angular is an efficient framework that allows an incredibly fast prototyping without closing the opportunity to develop a complex and sofisticated system.
+The framework helps the developer in managing the architecture of the single web page application thanks to its Components. They allow to define an independent piece of the system, respecting the Single Responsibility Principle, improving the reusability of the code, the readability and the mantainability.  
+These components are composed by 4 files:
+- a ts file, where relies the typescript logic of the component
+- an HTML file, where the graphic code is written
+- a spec file, for unit testing
+- a style file, for a custom style (for example CSS) management of the relative component  
+
+#### Angular, a powerful framework for single page applications developement
+
+As cited previously, Angular offers also a powerful Injection pattern to inject services inside out components' ts files. This greatly eases the dependencies management, while offering various advantages, such as improving the mantainability and readability.
+
+To manage all the async operations that occur while communicating with the backend server, an extensive usage of promises and obsarvables has been taken. These patterns are really helpful while dealing with http requests. As soon as any async request is accomplished, the view is updated.
+
+#### Express, a server in a bunch of lines of code
+
+The backend server written in JS using the Express framework, despite its simplicity, is extrimely compact and is working for the project's purpose. It let developers save tons of time when they need aspecific server to support the testing of another system.  
+Exposing APIs has been immediate.
+
+#### Okta, a secure and powerful identity provider
+
+Okta turned out into being a solid identity provider that allowed the integration of users authentication within our client and server. The Okta Develiper CLI allows to manage applications, authentications servers and users (and much more that we didn't need to use).  
+Anyway, the most notable thing is that the powerful Okta's libraries offered for Angular and Node allowed us to integrate the user authentication and token verification with ease and clarity.
