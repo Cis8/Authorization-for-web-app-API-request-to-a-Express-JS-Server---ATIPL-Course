@@ -31,32 +31,6 @@ The method authenticationRequired has the objective to actually check the user t
 
 ### Angular web-app client
 
-#### Organization and functionalities of the application
-
-There are three main components: AppComponent, LoginComponent, and ProtectedComponent.
-
-##### App Component
-
-Is the component for the home page of the site.
-
-In the HTML file of the component, there is some text that will help the user understand where he is and what he can to do.
-`ngIf` are used in the HTML files to show some tags in case the user is or is not authenticated yet.
-This simple addition to the tags helps improving the design of a more responsive application. For the developer is faster and more simple to have different content showed based on the client state.
-
-Angular offers the useful feature of service injection to allow the developer to easily reference services through a clean Injection Pattern.
-In the ts file instead we have the OktaAuthStateService injected in the component's constructor so that we have access to the user's authentication state, in order to show the proper content in the client page (through the `ngIf` clause in HTML tags).
-
-
-##### Login Component
-
-LoginComponent is responsible for redirecting the user to the Okta's sign in component, in order to login him into the webapp. It also allows the user to logout (once he is logged in).
-
-The protected component will allow the user to request for the desired resources and then show them to him. For simplicity the JSON of the request body is rawly written as text in the response filed.
-
-In case of missing token in the REST API request (suppose it has been sent with Postman, without a valid token) the erver will respond with "401 - Unauthorized". The server will use an Okta module to check the validity of the token.
-
-In case of non-existing resource, the server will respond with a 404 error and the response field with tell the user that the user couldn't be found.
-
 #### Modules and architecture
 
 The Angular application is based on Angular v14.2.0 and uses some modules to get the work done, in particular:
@@ -84,6 +58,46 @@ Is the widget that the user is redirected to when he is asked to sign in. Peculi
 
 proxy.conf.json file allows the API request rewriting so that they'll be formatted for the Express server. Basically, the API requests are formed by the string of text written in the input box in the Protected Component, appended to the base URL `http://localhost:8080`. For example, if we request for the resource 'tshirt', the API URL link will be `http://localhost:8080/tshirt`.
 Since we use this Proxy configuration, the web upp must be launched with the optional argument --proxy-config. The full command is: ng serve -o --proxy-config proxy.conf.json
+
+#### Organization and functionalities of the application
+
+There are three main components: AppComponent, LoginComponent, and ProtectedComponent.
+
+##### App Component
+
+Is the component for the home page of the site.
+
+In the HTML file of the component, there is some text that will help the user understand where he is and what he can to do.
+`ngIf` are used in the HTML files to show some tags in case the user is or is not authenticated yet.
+This simple addition to the tags helps improving the design of a more responsive application. For the developer is faster and more simple to have different content showed based on the client state.
+
+Angular offers the useful feature of service injection to allow the developer to easily reference services through a clean Injection Pattern.
+In the ts file instead we have the OktaAuthStateService and OktaAuth services injected in the component's constructor. So we have access to the user's authentication state and the user's information in order to show the proper content in the client page (through the `ngIf` clause in HTML tags).
+
+
+##### Login Component
+
+LoginComponent is responsible for redirecting the user to the Okta's sign in component, in order to login him into the webapp. It also allows the user to logout (only if he is already logged in).
+
+###### Authentication flow
+
+An async method is used to log the user in. The OktaAuth injected service offers the method `signInWithRedirect()`. Such a method will redirect the client's page to the Okta sign in page, where the user can fill the login form with its own credentials to be logged in. At this point, a temporary code generated from the Okta authentication server is given back to the client after the user has logged in. The client is now redirected to the OktaCallbackComponent, where the temporary code (passed along with the redirect URL) is parsed and exchanged for the actual token (using the OktaAuth service). The token is then stored and will be used by the protected component to send REST APIs requests with the token attached to them.
+
+##### Protected Component
+
+The protected component will allow the user to request for the desired resource and then show it to him. For simplicity, the JSON of the request body is rawly written as text in the response field.
+
+When the user tries to access the page from the navbar while not being logged in, the application will redirect him to the Okta sign in page. From there, the process is analogous to the authentication's one described in the [Authentication flow](#authentication-flow) paragraph. The only difference is that after the callback to the OktaCallbackComponent the user will be redirected to the Protected Component page (where he was before being redirected) instead of being redirected to the homepage.
+
+In case of missing token in the REST API request (suppose it has been sent with Postman, without a valid token) the server will respond with "401 unauthorized". The server will use an Okta module to check the validity of the token.
+
+In case of requesting for a non-existing resource, the server will respond with a 404 error and the response field will tell the user that the resource couldn't be found.
+
+In the ts file we have the `GetResource()` method, that is invocked when the _Submit_ button in the client interface is clicked. Such a method creates first the headers to be attached to the REST API http request sent to the server. Then reads the value of the input field, that describes the desired resource to get (and is the final part of the API request itself). Finally it calls the `GetResource` method from the `FormService` service to actually send the REST API request to the backend server. An observable is returned from the FormService's `GetResource()` method. We subscribe to that observable with a callback whose purpose is to:
+- save the JSON body of the request in a variable, in the case the request was succesfull.
+- set the requestState to 1 if an error occurred.
+
+The HTML file of the Protected component will show the JSON body of the request if the requestState variable is equals to 0 (was successfull), an error message otherwise (requestState is 1).
 
 
 ### Okta developer CLI
