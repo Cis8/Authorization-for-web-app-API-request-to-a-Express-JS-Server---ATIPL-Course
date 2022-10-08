@@ -2,6 +2,18 @@
 
 Okta resources, created with Pulumi, will be used to ease the process of authentication of a user that is accessing from a web app and is trying to get protected resources through REST APIs.
 
+## Summary
+
+- [Analysis of the System](#analysis-of-the-system)
+  - [Short overview of the system functioning](#short-overview-of-the-system-functioning)
+  - [Express backend JS server](#express-backend-js-server)
+  - [Anular web-app client](#angular-web-app-client)
+  - [Okta developer CLI](#okta-developer-cli)
+  - [Pulumi for Okta resources automated creation](#pulumi-for-okta-resources-automated-creation)
+- [Personal observations on the developed system and on the technologies used](#personal-observations-on-the-developed-system-and-on-the-technologies-used)
+  - [The simplicity of offering protected APIs](#the-simplicity-of-offering-protected-apis)
+  - [Final observations on the system](#final-observations-on-the-system)
+
 ## Analysis of the System
 
 The system is composed as follows:
@@ -146,7 +158,7 @@ These components are composed by 4 files:
 - a spec file, for unit testing
 - a style file, for a custom style (for example CSS) management of the relative component  
 
-#### Angular, a powerful framework for single page applications developement
+#### Angular, both a simple and a powerful framework for single page applications developement
 
 As cited previously, Angular offers also a powerful Injection pattern to inject services inside out components' ts files. This greatly eases the dependencies management, while offering various advantages, such as improving the mantainability and readability.
 
@@ -159,5 +171,13 @@ Exposing APIs has been immediate.
 
 #### Okta, a secure and powerful identity provider
 
-Okta turned out into being a solid identity provider that allowed the integration of users authentication within our client and server. The Okta Develiper CLI allows to manage applications, authentications servers and users (and much more that we didn't need to use).  
-Anyway, the most notable thing is that the powerful Okta's libraries offered for Angular and Node allowed us to integrate the user authentication and token verification with ease and clarity.
+Okta turned out into being a solid identity provider that allowed the integration of users authentication within our client and server. The Okta Develiper CLI allows to manage applications, authorization servers and users (and much more that we didn't need to use).  
+Anyway, the most notable thing is that the powerful Okta's libraries for Angular and Node allowed us to integrate the user authentication and token verification with ease and clarity.
+
+### Final observations on the system
+
+Nowadays, setting up such a system is eased by powerful tools such as the ones used in this project:
+Years ago:
+- the client web page had to be programmed by scratch with HTML, CSS and Javascript. Angular sped up this process
+- the absence of frameworks such as express required the programmer to implement the server from scratch as well. Much more time was required since all the basic functionalities, like the ones required in our case, had to be programmed from zero
+- the infrastructure born some years ago. It offered us the possibility to automatize the resource creation of Okta resources. Such an aproach reduces the manual intervention needed from the user (so it can also be inserted into any build management system) and reduces the chances of errors since it is scripted. Might be not so visible the advantages of such a technology in our case, but for bigger sistems, it will for sure be crucial for an efficient and safe resource creation routine
