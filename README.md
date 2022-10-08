@@ -14,6 +14,13 @@ Okta resources, created with Pulumi, will be used to ease the process of authent
   - [The simplicity of offering protected APIs](#the-simplicity-of-offering-protected-apis)
   - [Final observations on the system](#final-observations-on-the-system)
 
+## Docker images and system testing
+docker build -t express-server ./
+docker run -it -p 9000:8080 express-server
+
+docker build -t angular-spa-image .
+docker run -it -p 9200:4200 angular-spa-image
+
 ## Analysis of the System
 
 The system is composed as follows:
