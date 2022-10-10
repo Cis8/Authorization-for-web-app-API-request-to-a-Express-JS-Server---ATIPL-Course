@@ -1,0 +1,21 @@
+<div *ngIf="!(authStateService.authState$ | async).isAuthenticated" class="container">
+  <h1 class="display-6">Press <em>Login to your company</em> button to be redirected to your organization login page</h1>
+  <div class="card">
+    <div class="card-body">
+      <button type="button" class="btn btn-primary"  (click)="login()">Login to your company</button>
+    </div>
+  </div>
+</div>
+<div *ngIf="(authStateService.authState$ | async).isAuthenticated" class="container p-2">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Welcome {{ userClaims?.name }}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Email: {{ userClaims?.email }}</h6>
+      <p class="card-text">Region: {{ userClaims?.zoneinfo }}</p>
+      <button type="button" class="btn btn-primary" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>
+
+

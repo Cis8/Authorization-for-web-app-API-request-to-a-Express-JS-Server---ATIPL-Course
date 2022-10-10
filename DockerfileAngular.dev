@@ -1,0 +1,8 @@
+FROM node:16.17.0-alpine
+WORKDIR '/webapp'
+RUN npm install -g @angular/cli
+COPY ./AngularWebAppSPA/package.json .
+RUN npm install
+COPY ./AngularWebAppSPA .
+EXPOSE 4200
+CMD ["npm","start"]

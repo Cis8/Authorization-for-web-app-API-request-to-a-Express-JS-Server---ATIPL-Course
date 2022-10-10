@@ -1,0 +1,20 @@
+<form #resourceForm="ngForm">
+  <div class="form-group">
+    <label for="inputResourceName">Desired resource</label>
+    <input type="text" class="form-control" id="resourceInput" aria-describedby="emailHelp" placeholder="Enter resource name" ngModel name="resName">
+  </div>
+  <button id="submitButton" type="submit" (click)="GetResource()" class="btn btn-primary">Submit</button>
+</form>
+
+<div class="card" *ngIf="requestState !== -1">
+  <div class="card-body" *ngIf="requestState === 0">
+    <h5 class="card-title">Resource correctly obtained</h5>
+    <p class="card-text">Resource: {{ resource }}</p>
+    <p class="card-text">Resource body: {{ jsonResource }}</p>
+  </div>
+
+  <div class="card-body" *ngIf="requestState === 1">
+    <h5 class="card-title">Resource not found!</h5>
+    <p class="card-text">The desired resource was not found. Try to ask for another resource.</p>
+  </div>
+</div>

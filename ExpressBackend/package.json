@@ -1,0 +1,17 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "ATIPL project",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cisotto Emanuele",
+  "license": "ISC",
+  "dependencies": {
+    "@okta/jwt-verifier": "2.3",
+    "cors": "2.8",
+    "express": "^4.18.1",
+    "save": "^2.5.0"
+  }
+}

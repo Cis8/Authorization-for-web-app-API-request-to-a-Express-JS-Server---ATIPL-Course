@@ -1,0 +1,6 @@
+config:
+  aws:region: us-south-1
+  okta:apiToken:
+    secure: AAABAFN8OD4oRglmIhHp+yV1zhSJHlHgWTwkCQaqteCyXRWxSzfGBRRdJb9wPXZLphn7ztbUkFFuoVC4Mdj4a6hcmD7xbT9bTMQ=
+  okta:baseUrl: okta.com
+  okta:orgName: dev-32340939
