@@ -14,12 +14,13 @@ Okta resources, created with Pulumi, will be used to ease the process of authent
   - [The simplicity of offering protected APIs](#the-simplicity-of-offering-protected-apis)
   - [Final observations on the system](#final-observations-on-the-system)
 
-## Docker images and system testing
-docker build -t express-server ./
-docker run -it -p 9000:8080 express-server
+## Setup
 
-docker build -t angular-spa-image .
-docker run -it -p 9200:4200 angular-spa-image
+Clone the github repository with `git clone https://github.com/Cis8`
+
+Then, from inside the repo directory run the command `docker compose up --build`
+
+Now you can access the web app from `localhost:4200`
 
 ## Analysis of the System
 
