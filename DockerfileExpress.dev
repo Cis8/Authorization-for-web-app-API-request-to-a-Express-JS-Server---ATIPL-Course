@@ -1,7 +1,6 @@
 FROM node:16-slim
-WORKDIR /server
+WORKDIR '/server'
 COPY ./ExpressBackend/package.json .
 RUN npm install
 COPY ./ExpressBackend .
-EXPOSE 8080
 CMD ["node" ,"main.js"]

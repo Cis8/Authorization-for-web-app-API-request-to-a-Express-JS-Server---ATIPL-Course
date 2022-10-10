@@ -1,11 +1,20 @@
 version: '3'
 services:
-  web:
+  angular:
     build:
       context: .
       dockerfile: DockerfileAngular.dev
     ports: 
       - "4200:4200"
+    volumes:
+      - /app/node_modules
+      - .:/app
+  express:
+    build:
+      context: .
+      dockerfile: DockerfileExpress.dev
+    ports: 
+      - "8080:8080"
     volumes:
       - /app/node_modules
       - .:/app
